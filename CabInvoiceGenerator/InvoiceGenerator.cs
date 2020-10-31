@@ -19,8 +19,12 @@ namespace CabInvoiceGenerator
         private readonly int COST_PER_MINUTE;
         private readonly double MINIMUM_FARE;
 
+        /// UC 4        
+        RideRepository rideRepository = null;
+
         public InvoiceGenerator()
         {
+            rideRepository = new RideRepository();
             /// Initialization of constants
             COST_PER_KM = 10;
             COST_PER_MINUTE = 1;
@@ -84,6 +88,26 @@ namespace CabInvoiceGenerator
                     throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.NULL_RIDES, "Rides are null");
             }
             return new InvoiceSummary(rides.Length, totalFare,averageFare);
+        }
+
+        /// <summary>
+        /// UC 4 : Adds the rides of a particular user with given user Id into the dictionary collection.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="rides">The rides.</param>
+        public void AddRides(string userId,Ride[] rides)
+        {
+            rideRepository.AddRideDetails(userId, rides);
+        }
+
+        /// <summary>
+        /// UC 4 : Gets the invoice summary of the user with given user Id.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public InvoiceSummary GetInvoiceSummary(string userId)
+        {
+            return CalculateFare(rideRepository.GetRides(userId));
         }
     }
 }
