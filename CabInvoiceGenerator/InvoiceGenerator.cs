@@ -57,5 +57,30 @@ namespace CabInvoiceGenerator
             /// Returns the maximum value between calculated total fare and minimum fare
             return Math.Max(totalFare, MINIMUM_FARE);
         }
+
+        /// <summary>
+        /// UC 2 : Calculates the total fare for multiple rides.
+        /// </summary>
+        /// <param name="rides">The rides.</param>
+        /// <returns></returns>
+        /// <exception cref="CabInvoiceCustomException">Rides are null</exception>
+        public InvoiceSummary CalculateFare(Ride[] rides)
+        {
+            double totalFare = 0;
+            try
+            {
+                foreach(Ride ride in rides)
+                {
+                    totalFare += this.CalculateFare(ride.distance, ride.minutes);
+                }
+            }
+            catch
+            {
+                /// If the rides array does not contain any ride
+                if (rides == null)
+                    throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.NULL_RIDES, "Rides are null");
+            }
+            return new InvoiceSummary(rides.Length, totalFare);
+        }
     }
 }

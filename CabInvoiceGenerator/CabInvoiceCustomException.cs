@@ -22,7 +22,8 @@ namespace CabInvoiceGenerator
         public enum ExceptionType
         {            
             INVALID_DISTANCE,
-            INVALID_TIME
+            INVALID_TIME,
+            NULL_RIDES
         }
 
         public ExceptionType exceptionType;
