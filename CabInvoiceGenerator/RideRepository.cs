@@ -33,25 +33,19 @@ namespace CabInvoiceGenerator
         /// <exception cref="CabInvoiceCustomException">Rides are null</exception>
         public void AddRideDetails(string userId,Ride[] rides)
         {
-            try
+            /// If the rides array does not contain any ride
+            if (rides == null)
+                throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.NULL_RIDES, "Rides are null");
+            if (!userRideRepo.ContainsKey(userId))
             {
-                if (!userRideRepo.ContainsKey(userId))
+                List<Ride> rideList = new List<Ride>();
+                foreach (var ride in rides)
                 {
-                    List<Ride> rideList = new List<Ride>();
-                    foreach (var ride in rides)
-                    {
-                        rideList.Add(ride);
-                    }
-                    /// Adds the data into the dictionary
-                    this.userRideRepo.Add(userId, rideList);
+                    rideList.Add(ride);
                 }
-            }
-            catch
-            {
-                /// If the rides array does not contain any ride
-                if (rides == null)
-                    throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.NULL_RIDES, "Rides are null");
-            }
+                /// Adds the data into the dictionary
+                this.userRideRepo.Add(userId, rideList);
+            }           
         }
 
         /// <summary>
@@ -62,16 +56,12 @@ namespace CabInvoiceGenerator
         /// <exception cref="CabInvoiceCustomException">Invalid UserID</exception>
         public Ride[] GetRides(string userId)
         {
-            try
-            {
-                /// Converting the list into an array
-                return this.userRideRepo[userId].ToArray();
-            }
-            catch
-            {
-                /// If the user id entered does not exist
+            /// If the user id entered does not exist
+            if (!this.userRideRepo.ContainsKey(userId))
                 throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.INVALID_USER_ID, "Invalid UserID");
-            }
+            else
+                /// Converting the list into an array
+                return this.userRideRepo[userId].ToArray();            
         }
     }
 }
