@@ -31,14 +31,14 @@ namespace NUnitTestProject1
         }
 
         /// <summary>
-        /// UC 2 : Given multiple rides should return invoice summary with aggregate totalFare
+        /// UC 2 & 3 : Given multiple rides should return invoice summary with aggregate totalFare and average Fare
         /// </summary>
         [Test]
         public void GivenMultipleRides_ShouldReturnInvoiceSummary()
         {
             // Arrange
-            Ride[] rides = { new Ride(3, 5), new Ride(5, 4), new Ride(2, 7) };
-            InvoiceSummary expectedSummary = new InvoiceSummary(3,116);
+            Ride[] rides = { new Ride(3, 5), new Ride(5, 4), new Ride(2, 5) };
+            InvoiceSummary expectedSummary = new InvoiceSummary(3,114,38);
             invoiceGenerator = new InvoiceGenerator();
             // Act
             InvoiceSummary actualSummary = invoiceGenerator.CalculateFare(rides);            
